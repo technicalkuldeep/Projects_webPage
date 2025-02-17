@@ -1,35 +1,36 @@
-"use client";
+"use client"
 
-import { Github, ExternalLink } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { Github, ExternalLink } from "lucide-react"
+import Link from "next/link"
+import Image from "next/image"
+import { useEffect, useRef } from "react"
 
 export default function Home() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return; // Exit if canvas is not available
+    const canvas = canvasRef.current
+    if (!canvas) return
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return; // Exit if context is null
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
 
     // Set canvas size
     const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    setCanvasSize();
-    window.addEventListener("resize", setCanvasSize);
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    setCanvasSize()
+    window.addEventListener("resize", setCanvasSize)
 
     // Line parameters
-    const lines: any[] = [];
-    const numberOfLines = 50;
-    const speed = 0.5;
-    const lineLength = 100;
-    const lineWidth = 0.3;
+    const lines: any[] = []
+    const numberOfLines = 50
+    const speed = 0.5
+    const lineLength = 100
+    const lineWidth = 0.3
 
+    // Create initial lines
     for (let i = 0; i < numberOfLines; i++) {
       lines.push({
         x: Math.random() * canvas.width,
@@ -37,46 +38,48 @@ export default function Home() {
         length: lineLength,
         angle: Math.random() * Math.PI * 2,
         speed: speed * (Math.random() * 0.5 + 0.5),
-      });
+      })
     }
 
+    // Animation function
     function animate() {
-      if (!canvas || !ctx) return; // Ensure canvas and ctx are still valid
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)"
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.strokeStyle = "rgba(75, 85, 99, 0.3)";
-      ctx.lineWidth = lineWidth;
+      ctx.strokeStyle = "rgba(75, 85, 99, 0.3)"
+      ctx.lineWidth = lineWidth
 
       lines.forEach((line) => {
-        ctx.beginPath();
-        ctx.moveTo(line.x, line.y);
-        const endX = line.x + Math.cos(line.angle) * line.length;
-        const endY = line.y + Math.sin(line.angle) * line.length;
-        ctx.lineTo(endX, endY);
-        ctx.stroke();
+        ctx.beginPath()
+        ctx.moveTo(line.x, line.y)
+        const endX = line.x + Math.cos(line.angle) * line.length
+        const endY = line.y + Math.sin(line.angle) * line.length
+        ctx.lineTo(endX, endY)
+        ctx.stroke()
 
-        line.x += Math.cos(line.angle) * line.speed;
-        line.y += Math.sin(line.angle) * line.speed;
+        // Move line
+        line.x += Math.cos(line.angle) * line.speed
+        line.y += Math.sin(line.angle) * line.speed
 
-        if (line.x < -line.length) line.x = canvas.width + line.length;
-        if (line.x > canvas.width + line.length) line.x = -line.length;
-        if (line.y < -line.length) line.y = canvas.height + line.length;
-        if (line.y > canvas.height + line.length) line.y = -line.length;
+        // Wrap around screen
+        if (line.x < -line.length) line.x = canvas.width + line.length
+        if (line.x > canvas.width + line.length) line.x = -line.length
+        if (line.y < -line.length) line.y = canvas.height + line.length
+        if (line.y > canvas.height + line.length) line.y = -line.length
 
-        line.angle += (Math.random() - 0.5) * 0.01;
-      });
+        // Slightly change angle for organic movement
+        line.angle += (Math.random() - 0.5) * 0.01
+      })
 
-      requestAnimationFrame(animate);
+      requestAnimationFrame(animate)
     }
 
-    animate();
+    animate()
 
     return () => {
-      window.removeEventListener("resize", setCanvasSize);
-    };
-  }, []);
+      window.removeEventListener("resize", setCanvasSize)
+    }
+  }, [])
 
   const projects = [
     {
@@ -95,7 +98,7 @@ export default function Home() {
       codeUrl: "https://github.com/username/nft-marketplace",
       demoUrl: "https://nft-marketplace.vercel.app",
     },
-  ];
+  ]
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -163,5 +166,6 @@ export default function Home() {
         </div>
       </main>
     </div>
-  );
+  )
 }
+
